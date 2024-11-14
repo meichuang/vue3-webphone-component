@@ -1,24 +1,9 @@
 # vue3-webphone-component
 
-## Project setup
-```
-npm install
-```
+This project is not finished yet.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+The effect is as follows:
 
-### Compiles and minifies for production
-```
-npm run build
-```
+![image-20241114190729260](images\image-20241114190729260.png)
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+You can use the component to make call to a freeswitch server.
