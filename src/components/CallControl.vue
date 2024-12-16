@@ -24,12 +24,13 @@
 <script>
 import { ref, onMounted, markRaw } from 'vue';
 import JsSIP from "jssip";
+JsSIP.debug.disable('JsSIP:*');
 
 export default {
   name: "CallControl",
   data() {
     return { 
-      callStatus: ref('unavailable'), // 初始状态为不可用
+      callStatus: 'unavailable', // 初始状态为不可用
       userAgent: null 
     };
   },
@@ -41,6 +42,7 @@ export default {
   },
   computed: {
     buttonClass() {
+      console.log("callStatus = ", this.callStatus);
       switch (this.callStatus) {
         case 'unavailable':
           return 'gray-button';
@@ -102,6 +104,7 @@ export default {
         });
 
         this.userAgent.on("unregistered", (e) => {
+          console.log(new URL(import.meta.url).pathname.split('/').pop());
           console.log("Unregistered");
         });
 
@@ -169,19 +172,20 @@ export default {
       if (this.userAgent) {
         // Register callbacks to desired call events
         var eventHandlers = {
-          progress: function (data) {
+          //这里面的回调必须使用箭头函数，否则This指向是RTCSession
+          progress: (data) => {
             console.log("Call is in progress");
             this.callStatus = 'in-progress'; 
           },
-          failed: function (data) {
-            console.error("Call failed:", data);
+          failed: (data) => {
             this.callStatus = 'available';  // 呼叫失败
+            console.error("This Call failed:", data);            
           },
-          confirmed: function (data) {
+          confirmed: (data) => {
             console.log("Call accepted");
             this.callStatus = 'success';
           },
-          ended: function (data) {
+          ended: (data) => {
             console.log("Call ended");
             this.callStatus = 'available'; // 呼叫挂断
           },
